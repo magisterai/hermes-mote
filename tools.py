@@ -83,7 +83,9 @@ def render(args, mote_path="", **kwargs):
             content.append({"type": "image_url", "image_url": {"url": f"data:image/png;base64,{encoded}"}})
         # The text summary serves models that cannot receive images in a tool result; the paths let them
         # inspect the pages with the vision tool instead.
-        fallback = summary + "\nPage files:\n" + "\n".join(str(rendered[number - 1]) for number in numbers)
+        fallback = (summary + "\nThe page images could not be attached for this model, so you have NOT seen the pages. "
+                    "Before judging or changing the layout, look at each page with vision_analyze, passing its file "
+                    "path as image_url:\n" + "\n".join(str(rendered[number - 1]) for number in numbers))
         return {"_multimodal": True, "content": content, "text_summary": fallback,
                 "meta": {"pages": len(rendered), "directory": str(directory), "native_vision": True}}
     except subprocess.TimeoutExpired:
