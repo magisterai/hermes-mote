@@ -9,9 +9,8 @@ import tempfile
 from pathlib import Path
 
 INSTALL_HINT = (
-    "The mote executable was not found. Install it from source with "
-    "`cargo install --git https://github.com/magisterai/mote-rs mote`, or set the plugin "
-    "setting mote_path to its location."
+    "The mote executable was not found. Ask the user to run `hermes mote install`, which builds it "
+    "from source with cargo, or to set the plugin setting mote_path to its location."
 )
 DEFAULT_PAGES = 4
 MAXIMUM_PAGES = 8
@@ -19,10 +18,13 @@ TIMEOUT_SECONDS = 120
 
 
 def find_mote(configured=""):
-    """The mote executable: the configured path, then PATH, then Cargo's install directory."""
+    """The mote executable: the configured path, then PATH, then Cargo's install directories."""
     candidates = [configured] if configured else []
     candidates.append(shutil.which("mote") or "")
-    candidates.append(str(Path.home() / ".cargo" / "bin" / "mote"))
+    # cargo install writes to CARGO_INSTALL_ROOT, else CARGO_HOME, else ~/.cargo.
+    for root in (os.environ.get("CARGO_INSTALL_ROOT"), os.environ.get("CARGO_HOME"), str(Path.home() / ".cargo")):
+        if root:
+            candidates.append(str(Path(root) / "bin" / "mote"))
     for candidate in candidates:
         if candidate and os.path.isfile(candidate) and os.access(candidate, os.X_OK):
             return candidate

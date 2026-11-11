@@ -21,16 +21,17 @@ topic (text, tables, charts, slides, data, and so on).
 
 ## Install
 
-The plugin calls the `mote` executable, which is built from source:
-
 ```sh
-cargo install --git https://github.com/magisterai/mote-rs mote
 hermes plugins install mote
 hermes plugins enable mote
+hermes mote install
 ```
 
-The plugin looks for `mote` at the `mote_path` setting, then on `PATH`, then in
-`~/.cargo/bin`.
+The plugin calls the `mote` executable. The command `hermes mote install` builds
+it from source with Rust's `cargo`, at a pinned commit of
+[mote-rs](https://github.com/magisterai/mote-rs); [rustup](https://rustup.rs)
+installs Rust. The command `hermes mote status` shows which executable the plugin
+uses: the `mote_path` setting, then `mote` on `PATH`, then `~/.cargo/bin/mote`.
 
 ## Try it
 
@@ -41,9 +42,12 @@ The plugin looks for `mote` at the `mote_path` setting, then on `PATH`, then in
 ## What it does on your machine
 
 - Runs the local `mote` executable as a subprocess on the source file you name.
+- `hermes mote install`, when you run it, downloads the mote-rs source at a pinned
+  commit and its Rust dependencies from crates.io, and builds them with `cargo`.
 - Writes rendered pages to a new temporary directory, and exported files next to
   the source or at the path you give.
-- Makes no network calls, reads no credentials, and keeps no background process.
+- The tools make no network calls, read no credentials, and keep no background
+  process.
 
 ## License
 

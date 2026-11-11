@@ -3,7 +3,7 @@
 import functools
 from pathlib import Path
 
-from . import schemas, tools
+from . import installer, schemas, tools
 
 
 def register(ctx):
@@ -12,6 +12,9 @@ def register(ctx):
                       handler=functools.partial(tools.render, mote_path=mote_path))
     ctx.register_tool(name="mote_export", toolset="mote", schema=schemas.MOTE_EXPORT,
                       handler=functools.partial(tools.export, mote_path=mote_path))
+    ctx.register_cli_command(name="mote", help="Install or locate the mote executable",
+                             setup_fn=installer.setup_arguments,
+                             handler_fn=functools.partial(installer.handle, mote_path=mote_path))
     skill = Path(__file__).parent / "skills" / "mote" / "SKILL.md"
     ctx.register_skill("mote", skill,
                        description="The Mote markup language: one source compiles to editable Word and PowerPoint files and to PDF or PNG pages.")
