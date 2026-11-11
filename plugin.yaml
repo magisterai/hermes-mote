@@ -1,5 +1,5 @@
 name: mote
-version: 0.1.0
+version: 0.1.1
 manifest_version: 2
 api_version: 1
 description: Write documents in Mote and see them. Renders Mote source to page images the agent can look at, and exports editable Word, PowerPoint and PDF files.
